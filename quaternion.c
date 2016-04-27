@@ -62,18 +62,32 @@ void libera_lista_quaternion(quaternion *lista) {
 }
 
 
-void suma_quaternion(quaternion sum1,quaternion sum2,quaternion *res){
+void suma_quaternion(quaternion A,quaternion B,quaternion *R){
     int i=0;
     for(i=0;i<4;i++){
-        res->comp[i] = sum1.comp[i] + sum2.comp[i];
+        R->comp[i] = A.comp[i] + B.comp[i];
     }
 }
 
 
-void suma_lista_quaternion(quaternion *listaSum1,quaternion *listaSum2,quaternion *listaRes){
+void Aa_lista_quaternion(quaternion *listaA,quaternion *listaB,quaternion *listaR){
     int i=0;
     for(i=0;i<N;i++){
-        suma_quaternion(*(listaSum1 + i),*(listaSum2 + i),(listaRes + i));
+        suma_quaternion(*(listaA + i),*(listaB + i),(listaR + i));
+    }
+}
+
+void multiplica_quaternion(quaternion A,quaternion B,quaternion *R){
+    R->comp[0] = A.comp[0]*B.comp[0] - A.comp[1]*B.comp[1] - A.comp[2]*B.comp[2] - A.comp[3]*B.comp[3];
+    R->comp[1] = A.comp[0]*B.comp[1] + A.comp[1]*B.comp[0] + A.comp[2]*B.comp[3] - A.comp[3]*B.comp[2];
+    R->comp[2] = A.comp[0]*B.comp[2] - A.comp[1]*B.comp[3] + A.comp[2]*B.comp[0] + A.comp[3]*B.comp[1];
+    R->comp[3] = A.comp[0]*B.comp[3] + A.comp[1]*B.comp[2] - A.comp[2]*B.comp[1] + A.comp[3]*B.comp[0];  
+}
+
+void multiplica_lista_quaternion(quaternion *listaA,quaternion *listaB,quaternion *listaR){
+    int i=0;
+    for(i=0;i<N;i++){
+        multiplica_quaternion(*(listaA + i),*(listaB + i),(listaR + i));
     }
 }
 	
