@@ -8,12 +8,14 @@ int main() {
 	quaternion *lista_op_1;
 	quaternion *lista_op_2;
 	quaternion *lista_res;	
+    quaternion *lista_aux;
 	int i;	
 	float x, y, z, w;
 	
 	lista_op_1 = genera_lista_quaternion();
 	lista_op_2 = genera_lista_quaternion();
 	lista_res = genera_lista_quaternion();
+    lista_aux = genera_lista_quaternion();
 
 	srand(time(NULL));
 
@@ -33,6 +35,11 @@ int main() {
 		aux = genera_quaternion(x, y, z, w);	
 		anhade_elemento_lista(lista_res, *aux, i);		
 	}
+    for(i=0; i<N ;i++){
+        x = 0; y = 0; z = 0; w = 0;
+        aux = genera_quaternion(x, y, z, w);
+        anhade_elemento_lista(lista_aux, *aux, i);
+    }
 	
 	printf("LISTA 1:\n");
 	imprime_lista_quaternion(lista_op_1);
@@ -40,8 +47,19 @@ int main() {
 	imprime_lista_quaternion(lista_op_2);
 	printf("LISTA 3:\n");
 	imprime_lista_quaternion(lista_res);
+    
+    printf("Multiplicacion de Quaterniones:\n");
     multiplica_lista_quaternion(lista_op_1,lista_op_2,lista_res);
-    printf("\n");
+    imprime_lista_quaternion(lista_res);
+
+    for(i=0; i<N ;i++){
+        x = 0; y = 0; z = 0; w = 0;
+        aux = genera_quaternion(x, y, z, w);
+        anhade_elemento_lista(lista_res, *aux, i);
+    }
+
+    printf("Elevar al cuadrado y suma:\n");
+    segunda_computacion(lista_op_1, lista_aux, lista_res);
     imprime_lista_quaternion(lista_res);
 	//libera_lista_quaternion(lista_op_1);
 	//libera_lista_quaternion(lista_op_2);

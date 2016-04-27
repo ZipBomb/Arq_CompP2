@@ -62,32 +62,37 @@ void libera_lista_quaternion(quaternion *lista) {
 }
 
 
-void suma_quaternion(quaternion A,quaternion B,quaternion *R){
+void suma_quaternion(quaternion A, quaternion B, quaternion *R){
     int i=0;
-    for(i=0;i<4;i++){
+    for(i=0; i<4; i++){
         R->comp[i] = A.comp[i] + B.comp[i];
     }
 }
 
 
-void Aa_lista_quaternion(quaternion *listaA,quaternion *listaB,quaternion *listaR){
+void suma_lista_quaternion(quaternion *listaA, quaternion *listaB, quaternion *listaR){
     int i=0;
-    for(i=0;i<N;i++){
-        suma_quaternion(*(listaA + i),*(listaB + i),(listaR + i));
+    for(i=0; i<N; i++){
+        suma_quaternion(*(listaA + i), *(listaB + i), (listaR + i));
     }
 }
 
-void multiplica_quaternion(quaternion A,quaternion B,quaternion *R){
-    R->comp[0] = A.comp[0]*B.comp[0] - A.comp[1]*B.comp[1] - A.comp[2]*B.comp[2] - A.comp[3]*B.comp[3];
-    R->comp[1] = A.comp[0]*B.comp[1] + A.comp[1]*B.comp[0] + A.comp[2]*B.comp[3] - A.comp[3]*B.comp[2];
-    R->comp[2] = A.comp[0]*B.comp[2] - A.comp[1]*B.comp[3] + A.comp[2]*B.comp[0] + A.comp[3]*B.comp[1];
+void multiplica_quaternion(quaternion A, quaternion B, quaternion *R){
+    R->comp[0] = A.comp[0] * B.comp[0] - A.comp[1] * B.comp[1] - A.comp[2] * B.comp[2] - A.comp[3] * B.comp[3];
+    R->comp[1] = A.comp[0] * B.comp[1] + A.comp[1] * B.comp[0] + A.comp[2] * B.comp[3] - A.comp[3] * B.comp[2];
+    R->comp[2] = A.comp[0] * B.comp[2] - A.comp[1] * B.comp[3] + A.comp[2] * B.comp[0] + A.comp[3] * B.comp[1];
     R->comp[3] = A.comp[0]*B.comp[3] + A.comp[1]*B.comp[2] - A.comp[2]*B.comp[1] + A.comp[3]*B.comp[0];  
 }
 
-void multiplica_lista_quaternion(quaternion *listaA,quaternion *listaB,quaternion *listaR){
+void multiplica_lista_quaternion(quaternion *listaA, quaternion *listaB, quaternion *listaR){
     int i=0;
-    for(i=0;i<N;i++){
-        multiplica_quaternion(*(listaA + i),*(listaB + i),(listaR + i));
+    for(i=0; i<N; i++){
+        multiplica_quaternion(*(listaA + i), *(listaB + i), (listaR + i));
     }
+}
+
+void segunda_computacion(quaternion *listaA, quaternion *listaAux, quaternion *listaR){
+    multiplica_lista_quaternion(listaA, listaA, listaAux);
+    suma_lista_quaternion(listaAux, listaR, listaR);
 }
 	
