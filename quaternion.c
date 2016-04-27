@@ -55,10 +55,7 @@ void imprime_lista_quaternion(quaternion *lista) {
 }
 
 void libera_lista_quaternion(quaternion *lista) {
-	int i;
-	for(i=0; i<N; i++) {
-		libera_quaternion(lista + i);		
-	}
+	free(lista);
 }
 
 

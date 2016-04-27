@@ -66,7 +66,7 @@ int main() {
 
     printf("Ciclos de acceso a un quaternion: %f\n",ck);
 
-	//libera_lista_quaternion(lista_A);
-	//libera_lista_quaternion(lista_B);
-	//libera_lista_quaternion(lista_C);
+	libera_lista_quaternion(lista_A);
+	libera_lista_quaternion(lista_B);
+	libera_lista_quaternion(lista_C);
 }	
