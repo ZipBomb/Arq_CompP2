@@ -1,9 +1,9 @@
 CC = gcc -Wall -O0
 MAIN = test
 
-SRCS = main.c quaternion.c
+SRCS = main.c quaternion.c rutinas_clock.c
 
-DEPS = quaternion.h 
+DEPS = quaternion.h rutinas_clock.h
 
 OBJS = $(SRCS:.c=.o)
 
