@@ -40,8 +40,10 @@ int main() {
 	imprime_lista_quaternion(lista_op_2);
 	printf("LISTA 3:\n");
 	imprime_lista_quaternion(lista_res);
-
-	libera_lista_quaternion(lista_op_1);
-	libera_lista_quaternion(lista_op_2);
-	libera_lista_quaternion(lista_res);
+    suma_lista_quaternion(lista_op_1,lista_op_2,lista_res);
+    printf("\n");
+    imprime_lista_quaternion(lista_res);
+	//libera_lista_quaternion(lista_op_1);
+	//libera_lista_quaternion(lista_op_2);
+	//libera_lista_quaternion(lista_res);
 }	

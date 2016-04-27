@@ -6,11 +6,11 @@ typedef struct {
 
 float genera_float();
 quaternion *genera_quaternion(float x, float y, float z, float w);
-quaternion *multiplica_quaternion(quaternion a, quaternion b);
-quaternion *suma_quaternion(quaternion a, quaternion b);
 void imprime_quaternion(quaternion aux);
 void libera_quaternion(quaternion *aux);
 quaternion *genera_lista_quaternion();
 void anhade_elemento_lista(quaternion *lista, quaternion elemento, int pos);
 void imprime_lista_quaternion(quaternion *lista);
 void libera_lista_quaternion(quaternion *lista);
+void suma_quaternion(quaternion sum1,quaternion sum2,quaternion *res);
+void suma_lista_quaternion(quaternion *listaSum1,quaternion *listaSum2,quaternion *listaRes);

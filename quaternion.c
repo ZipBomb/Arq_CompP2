@@ -24,13 +24,6 @@ quaternion *genera_quaternion(float x, float y, float z, float w) {
 	return q;
 }
 
-quaternion *multiplica_quaternion(quaternion a, quaternion b) {
-	return NULL;
-}
-
-quaternion *suma_quaternion(quaternion a, quaternion b) {
-	return NULL;
-}
 
 void imprime_quaternion(quaternion aux) {
 	printf("{ %f, %f, %f, %f }\n", aux.comp[0], aux.comp[1], aux.comp[2], aux.comp[3]);
@@ -66,5 +59,21 @@ void libera_lista_quaternion(quaternion *lista) {
 	for(i=0; i<N; i++) {
 		libera_quaternion(lista + i);		
 	}
+}
+
+
+void suma_quaternion(quaternion sum1,quaternion sum2,quaternion *res){
+    int i=0;
+    for(i=0;i<4;i++){
+        res->comp[i] = sum1.comp[i] + sum2.comp[i];
+    }
+}
+
+
+void suma_lista_quaternion(quaternion *listaSum1,quaternion *listaSum2,quaternion *listaRes){
+    int i=0;
+    for(i=0;i<N;i++){
+        suma_quaternion(*(listaSum1 + i),*(listaSum2 + i),(listaRes + i));
+    }
 }
 	
