@@ -3,19 +3,21 @@
 #include <float.h>
 #include <time.h>
 #include "quaternion.h"
+#include "rutinas_clock.h"
 
 int main() {	
-	quaternion *lista_op_1;
-	quaternion *lista_op_2;
-	quaternion *lista_res;	
-    quaternion *lista_aux;
+	quaternion *lista_A;
+	quaternion *lista_B;
+	quaternion *lista_C;	
+    quaternion *lista_DP;
 	int i;	
 	float x, y, z, w;
+    double ck=0;
 	
-	lista_op_1 = genera_lista_quaternion();
-	lista_op_2 = genera_lista_quaternion();
-	lista_res = genera_lista_quaternion();
-    lista_aux = genera_lista_quaternion();
+	lista_A = genera_lista_quaternion();
+	lista_B = genera_lista_quaternion();
+	lista_C = genera_lista_quaternion();
+    lista_DP = genera_lista_quaternion();
 
 	srand(time(NULL));
 
@@ -23,45 +25,48 @@ int main() {
 	for(i=0; i<N; i++) {
 		x = genera_float(); y = genera_float(); z = genera_float(); w = genera_float();
 		aux = genera_quaternion(x, y, z, w);	
-		anhade_elemento_lista(lista_op_1, *aux, i);		
+		anhade_elemento_lista(lista_A, *aux, i);		
 	}
 	for(i=0; i<N; i++) {
 		x = genera_float(); y = genera_float(); z = genera_float(); w = genera_float();
 		aux = genera_quaternion(x, y, z, w);	
-		anhade_elemento_lista(lista_op_2, *aux, i);		
+		anhade_elemento_lista(lista_B, *aux, i);		
 	}
 	for(i=0; i<N; i++) {
 		x = genera_float(); y = genera_float(); z = genera_float(); w = genera_float();
 		aux = genera_quaternion(x, y, z, w);	
-		anhade_elemento_lista(lista_res, *aux, i);		
+		anhade_elemento_lista(lista_C, *aux, i);		
 	}
     for(i=0; i<N ;i++){
         x = 0; y = 0; z = 0; w = 0;
         aux = genera_quaternion(x, y, z, w);
-        anhade_elemento_lista(lista_aux, *aux, i);
+        anhade_elemento_lista(lista_DP, *aux, i);
     }
 	
-	printf("LISTA 1:\n");
-	imprime_lista_quaternion(lista_op_1);
-	printf("LISTA 2:\n");
-	imprime_lista_quaternion(lista_op_2);
-	printf("LISTA 3:\n");
-	imprime_lista_quaternion(lista_res);
-    
-    printf("Multiplicacion de Quaterniones:\n");
-    multiplica_lista_quaternion(lista_op_1,lista_op_2,lista_res);
-    imprime_lista_quaternion(lista_res);
-
-    for(i=0; i<N ;i++){
+	
+	for(i=0; i<N ;i++){
         x = 0; y = 0; z = 0; w = 0;
         aux = genera_quaternion(x, y, z, w);
-        anhade_elemento_lista(lista_res, *aux, i);
+        anhade_elemento_lista(lista_DP, *aux, i);
     }
+    printf("LISTA 1:\n");
+	imprime_lista_quaternion(lista_A);
+	printf("LISTA 2:\n");
+	imprime_lista_quaternion(lista_B);
+	printf("LISTA 3:\n");
+	imprime_lista_quaternion(lista_C);
+    
+    start_counter();
+    for(i=0; i<20; i++){
+        multiplica_lista_quaternion(lista_A,lista_B,lista_C);        
+        segunda_computacion(lista_C, lista_DP, lista_DP);
+    }
+    ck=get_counter();
+    ck=ck/(N*20);
 
-    printf("Elevar al cuadrado y suma:\n");
-    segunda_computacion(lista_op_1, lista_aux, lista_res);
-    imprime_lista_quaternion(lista_res);
-	//libera_lista_quaternion(lista_op_1);
-	//libera_lista_quaternion(lista_op_2);
-	//libera_lista_quaternion(lista_res);
+    printf("Ciclos de acceso a un quaternion: %f\n",ck);
+
+	//libera_lista_quaternion(lista_A);
+	//libera_lista_quaternion(lista_B);
+	//libera_lista_quaternion(lista_C);
 }	
