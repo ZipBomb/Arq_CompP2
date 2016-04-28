@@ -5,7 +5,17 @@
 #include "quaternion.h"
 #include "rutinas_clock.h"
 
-int main() {	
+int main(int argc, char *argv[]) {
+
+	int N;
+
+	if(argc != 2 ) {
+		printf("Uso correcto: ./test <N>\n");
+		exit(0);
+	}
+	else
+		N = atoi(argv[1]);
+
 	quaternion *lista_A;
 	quaternion *lista_B;
 	quaternion *lista_C;	
@@ -18,11 +28,10 @@ int main() {
     if((fp = fopen("puntos.txt","a+")) == NULL)
         perror("en la apertura del archivo");
 
-
-	lista_A = genera_lista_quaternion();
-	lista_B = genera_lista_quaternion();
-	lista_C = genera_lista_quaternion();
-    lista_DP = genera_lista_quaternion();
+	lista_A = genera_lista_quaternion(N);
+	lista_B = genera_lista_quaternion(N);
+	lista_C = genera_lista_quaternion(N);
+    lista_DP = genera_lista_quaternion(N);
 
 	srand(time(NULL));
 
@@ -47,37 +56,29 @@ int main() {
         aux = genera_quaternion(x, y, z, w);
         anhade_elemento_lista(lista_DP, *aux, i);
     }
-	
-	
-	for(i=0; i<N ;i++){
-        x = 0; y = 0; z = 0; w = 0;
-        aux = genera_quaternion(x, y, z, w);
-        anhade_elemento_lista(lista_DP, *aux, i);
-    }
-    
-    
+        
     start_counter();
     for(i=0; i<20; i++){
-        multiplica_lista_quaternion(lista_A,lista_B,lista_C);        
-        segunda_computacion(lista_C, lista_DP, lista_DP);
+        multiplica_lista_quaternion(lista_A, lista_B, lista_C, N);        
+        segunda_computacion(lista_C, lista_DP, lista_DP, N);
     }
     ck=get_counter();
     ck=ck/(N*20);
 
-    printf("Ciclos de acceso a un quaternion: %f\n",ck);
+    printf("Ciclos de acceso a un quaternion [N = %d]: %f\n", N, ck);
     
     fprintf(fp,"%f  ",ck);
     fprintf(fp,"%d\n",N);
     fclose(fp);
     
-    printf("LISTA 1:\n");
-    imprime_lista_quaternion(lista_A);
+    /*printf("LISTA 1:\n");
+    imprime_lista_quaternion(lista_A, N);
     printf("LISTA 2:\n");
-    imprime_lista_quaternion(lista_B);
+    imprime_lista_quaternion(lista_B, N);
     printf("LISTA 3:\n");
-    imprime_lista_quaternion(lista_C);
+    imprime_lista_quaternion(lista_C, N);
     printf("LISTA FINAL:\n");
-    imprime_lista_quaternion(lista_DP);
+    imprime_lista_quaternion(lista_DP, N);*/
 
 	libera_lista_quaternion(lista_A);
 	libera_lista_quaternion(lista_B);
