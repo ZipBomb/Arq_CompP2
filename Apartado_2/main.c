@@ -8,7 +8,6 @@
 int main(int argc, char *argv[]) {
 
 	int N;
-
 	if(argc != 2) {
 		printf("Uso correcto: ./test <N>");
 		exit(0);
@@ -25,7 +24,7 @@ int main(int argc, char *argv[]) {
     double ck=0;
 
     FILE *fp;
-    if((fp = fopen("puntos.txt","a")) == NULL)
+    if((fp = fopen("datosOptimizados.txt","a")) == NULL)
         perror("en la apertura del archivo");    
 
 	lista_A = genera_lista_quaternion(N);
@@ -34,52 +33,53 @@ int main(int argc, char *argv[]) {
     lista_DP = genera_lista_quaternion(N);
 
 	srand(time(NULL));
-
+	
 	quaternion *aux;
+	
 	for(i=0; i<N; i++) {
 		x = genera_float(); y = genera_float(); z = genera_float(); w = genera_float();
 		aux = genera_quaternion(x, y, z, w);	
 		anhade_elemento_lista(lista_A, *aux, i);		
 	}
+	
 	for(i=0; i<N; i++) {
 		x = genera_float(); y = genera_float(); z = genera_float(); w = genera_float();
 		aux = genera_quaternion(x, y, z, w);	
 		anhade_elemento_lista(lista_B, *aux, i);		
 	}
+	
 	for(i=0; i<N; i++) {
-		x = genera_float(); y = genera_float(); z = genera_float(); w = genera_float();
+		x = 0; y = 0; z = 0; w = 0;
 		aux = genera_quaternion(x, y, z, w);	
 		anhade_elemento_lista(lista_C, *aux, i);		
 	}
+	
     for(i=0; i<N ;i++){
         x = 0; y = 0; z = 0; w = 0;
         aux = genera_quaternion(x, y, z, w);
         anhade_elemento_lista(lista_DP, *aux, i);
     }
     
+        
     start_counter();
     for(i=0; i<20; i++){
-        multiplica_lista_quaternion(lista_A,lista_B,lista_C, N);        
+        multiplica_lista_quaternion(lista_A,lista_B,lista_C, N);    
         segunda_computacion(lista_C, lista_DP, lista_DP, N);
     }
     ck=get_counter();
     ck=ck/(N*20);
+
     
     printf("Ciclos de acceso a un quaternion [N = %d]: %f\n",N, ck);
     fprintf(fp,"%f  ",ck);
     fprintf(fp,"%d\n",N);
     fclose(fp);
     
-    /*printf("LISTA 1:\n");
-	imprime_lista_quaternion(lista_A);
-	printf("LISTA 2:\n");
-	imprime_lista_quaternion(lista_B);
-	printf("LISTA 3:\n");
-	imprime_lista_quaternion(lista_C);
-    printf("LISTA FINAL:\n");
-    imprime_lista_quaternion(lista_DP);*/
+    
+    libera_lista_quaternion(lista_A);
+    libera_lista_quaternion(lista_B);
+    libera_lista_quaternion(lista_C);
+    libera_lista_quaternion(lista_DP);
 
-	libera_lista_quaternion(lista_A);
-	libera_lista_quaternion(lista_B);
-	libera_lista_quaternion(lista_C);
+	return 1;
 }	

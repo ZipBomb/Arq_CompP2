@@ -1,7 +1,13 @@
 #!/bin/bash
 
-N=(10000 10000 10000 100000 100000 100000 1000000 1000000 1000000 10000000 10000000 10000000)
+N=(100 10000 1000000 10000000)
+
+if [ -f "datosNormales.txt" ]; then
+    rm "datosNormales.txt";
+fi
 
 for i in "${N[@]}"; do
-	./test $i
+    for ((j=0; j<3; j++)); do    
+        ./test $i
+    done
 done

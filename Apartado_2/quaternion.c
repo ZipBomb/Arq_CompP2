@@ -16,7 +16,7 @@ float genera_float() {
 }
 
 quaternion *genera_quaternion(float x, float y, float z, float w) {	
-	quaternion *q = _mm_malloc(sizeof(quaternion),512);
+	quaternion *q = malloc(sizeof(quaternion));
 	
 	if(q != NULL) {
 		q->comp[0] = x; q->comp[1] = y; q->comp[2] = z; q->comp[3] = w;
@@ -59,19 +59,25 @@ void libera_lista_quaternion(quaternion *lista) {
 }
 
 
-void suma_quaternion(quaternion A, quaternion B, quaternion *R){
-    int i=0;
-    for(i=0; i<4; i++){
-        R->comp[i] = A.comp[i] + B.comp[i];
-    }
+void suma_quaternion(quaternion A, quaternion B, quaternion *R){ 
+    R->comp[0] = A.comp[0] + B.comp[0];
+    R->comp[1] = A.comp[1] + B.comp[1];
+    R->comp[2] = A.comp[2] + B.comp[2];
+    R->comp[3] = A.comp[3] + B.comp[3];
 }
 
 
 void suma_lista_quaternion(quaternion *listaA, quaternion *listaB, quaternion *listaR, int N){
     int i=0;
-    for(i=0; i<N/2; i++){
+    for(i=0; i<N/8; i++){
         suma_quaternion(*(listaA + i), *(listaB + i), (listaR + i));
-        suma_quaternion(*(listaA + (i+1)), *(listaB + (i+1)), (listaR + (i+1)));
+        suma_quaternion(*(listaA + i+1), *(listaB + i+1), (listaR + i+1));
+     	suma_quaternion(*(listaA + i+2), *(listaB + i+2), (listaR + i+2));
+	    suma_quaternion(*(listaA + i+3), *(listaB + i+3), (listaR + i+3));
+	    suma_quaternion(*(listaA + i+4), *(listaB + i+4), (listaR + i+4));
+        suma_quaternion(*(listaA + i+5), *(listaB + i+5), (listaR + i+5));
+        suma_quaternion(*(listaA + i+6), *(listaB + i+6), (listaR + i+6));
+        suma_quaternion(*(listaA + i+7), *(listaB + i+7), (listaR + i+7));
     }
 }
 

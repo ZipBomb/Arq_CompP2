@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     double ck=0;
 	
     FILE *fp;
-    if((fp = fopen("puntos.txt","a+")) == NULL)
+    if((fp = fopen("datosNormales.txt","a+")) == NULL)
         perror("en la apertura del archivo");
 
 	lista_A = genera_lista_quaternion(N);
@@ -71,16 +71,10 @@ int main(int argc, char *argv[]) {
     fprintf(fp,"%d\n",N);
     fclose(fp);
     
-    /*printf("LISTA 1:\n");
-    imprime_lista_quaternion(lista_A, N);
-    printf("LISTA 2:\n");
-    imprime_lista_quaternion(lista_B, N);
-    printf("LISTA 3:\n");
-    imprime_lista_quaternion(lista_C, N);
-    printf("LISTA FINAL:\n");
-    imprime_lista_quaternion(lista_DP, N);*/
 
 	libera_lista_quaternion(lista_A);
 	libera_lista_quaternion(lista_B);
 	libera_lista_quaternion(lista_C);
+
+	return 1;
 }	
