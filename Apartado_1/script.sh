@@ -7,7 +7,7 @@ if [ -f "datosNormales.txt" ]; then
 fi
 
 for i in "${N[@]}"; do
-    for ((j=0; j<3; j++)); do    
+    for ((j=0; j<10; j++)); do    
         ./test $i
     done
 done
