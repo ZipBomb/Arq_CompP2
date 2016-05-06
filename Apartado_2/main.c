@@ -18,19 +18,16 @@ int main(int argc, char *argv[]) {
 	quaternion *lista_A;
 	quaternion *lista_B;
 	quaternion *lista_C;	
-    quaternion *lista_DP;
+    quaternion *lista_Aux;
 	int i;	
 	float x, y, z, w;
     double ck=0;
 
-    FILE *fp;
-    if((fp = fopen("datosOptimizados.txt","a")) == NULL)
-        perror("en la apertura del archivo");    
-
+   
 	lista_A = genera_lista_quaternion(N);
 	lista_B = genera_lista_quaternion(N);
 	lista_C = genera_lista_quaternion(N);
-    lista_DP = genera_lista_quaternion(N);
+    lista_Aux = genera_lista_quaternion(N);
 
 	srand(time(NULL));
 	
@@ -57,29 +54,30 @@ int main(int argc, char *argv[]) {
     for(i=0; i<N ;i++){
         x = 0; y = 0; z = 0; w = 0;
         aux = genera_quaternion(x, y, z, w);
-        anhade_elemento_lista(lista_DP, *aux, i);
+        anhade_elemento_lista(lista_Aux, *aux, i);
     }
+    
+    quaternion *dp;
+    x = 0; y = 0; z = 0; w = 0;
+    dp = genera_quaternion(x, y, z, w);
     
         
     start_counter();
     for(i=0; i<20; i++){
         multiplica_lista_quaternion(lista_A,lista_B,lista_C, N);    
-        segunda_computacion(lista_C, lista_DP, lista_DP, N);
+        segunda_computacion(lista_C, lista_Aux, dp, N);
     }
     ck=get_counter();
     ck=ck/(N*20);
 
     
     printf("Ciclos de acceso a un quaternion [N = %d]: %f\n",N, ck);
-    fprintf(fp,"%f  ",ck);
-    fprintf(fp,"%d\n",N);
-    fclose(fp);
     
     
     libera_lista_quaternion(lista_A);
     libera_lista_quaternion(lista_B);
     libera_lista_quaternion(lista_C);
-    libera_lista_quaternion(lista_DP);
+    libera_lista_quaternion(lista_Aux);
 
 	return 1;
 }	
