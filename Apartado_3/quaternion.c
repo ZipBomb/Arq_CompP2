@@ -74,9 +74,7 @@ void multiplica_quaternion(quaternion A, quaternion B, quaternion *R){
 	
 	mR=_mm_addsub_ps(_mm_shuffle_ps(mAux5,mAux4,_MM_SHUFFLE(3,2,1,0)),_mm_shuffle_ps(mAux5,mAux4,_MM_SHUFFLE(2,3,0,1)));	
 	mR=_mm_shuffle_ps(mR,mR,_MM_SHUFFLE(2,1,3,0));
-	
-	
-		
+			
 	_mm_store_ps(R->comp,mR);    
 }
 
