@@ -16,7 +16,7 @@ float genera_float() {
 }
 
 quaternion *genera_quaternion(float x, float y, float z, float w) {	
-	quaternion *q = _mm_malloc(sizeof(quaternion),16);
+	quaternion *q = malloc(sizeof(quaternion));
 	
 	if(q != NULL) {
 		q->comp[0] = x; q->comp[1] = y; q->comp[2] = z; q->comp[3] = w;
@@ -35,7 +35,7 @@ void libera_quaternion(quaternion *aux) {
 }
 
 quaternion *genera_lista_quaternion(int N) {
-	quaternion *v = malloc(N * sizeof(quaternion));
+	quaternion *v = _mm_malloc(N * sizeof(quaternion),512);
 
 	return v;
 }
@@ -60,28 +60,21 @@ void libera_lista_quaternion(quaternion *lista) {
 
 
 void multiplica_quaternion(quaternion A, quaternion B, quaternion *R){
-	__m128 mA,mA1,mA2,mA3,mB,mB1,mB2,mB3,mC,mC1,mC2,mC3,mR;
+	__m128 mA,mB,mAux1,mAux2,mAux3,mAux4,mAux5,mR;
 	
-	mA=_mm_set_ps(A.comp[0],A.comp[0],A.comp[0],A.comp[0]);
-	mA1=_mm_set_ps(-A.comp[1],A.comp[1],-A.comp[1],A.comp[1]);
-	mA2=_mm_set_ps(-A.comp[2],A.comp[2],A.comp[2],-A.comp[2]);
-	mA3=_mm_set_ps(-A.comp[3],-A.comp[3],-A.comp[3],A.comp[3]);
+	mA=_mm_load_ps(A.comp);
+	mB=_mm_load_ps(B.comp);
 	
-	mB=_mm_set_ps(B.comp[0],B.comp[1],B.comp[2],B.comp[3]);
-	mB1=_mm_set_ps(B.comp[1],B.comp[0],B.comp[3],B.comp[2]);
-	mB2=_mm_set_ps(B.comp[2],B.comp[3],B.comp[0],B.comp[1]);
-	mB3=_mm_set_ps(B.comp[3],B.comp[2],B.comp[1],B.comp[0]);
+	mAux1=_mm_shuffle_ps(mA,mA,_MM_SHUFFLE(0,1,2,3));
+	mAux2=_mm_shuffle_ps(mB,mB,_MM_SHUFFLE(0,1,0,1));
+	mAux3=_mm_shuffle_ps(mB,mB,_MM_SHUFFLE(2,3,2,3));
 	
-	mC=_mm_mul_ps(mA,mB);
-	mC1=_mm_mul_ps(mA1,mB1);
-	mC2=_mm_mul_ps(mA2,mB2);
-	mC3=_mm_mul_ps(mA3,mB3);
+	mAux4=_mm_hsub_ps(_mm_mul_ps(mA,mAux2),_mm_mul_ps(mAux1,mAux3));
+	mAux5=_mm_hadd_ps(_mm_mul_ps(mA,mAux3),_mm_mul_ps(mAux1,mAux2));
 	
-	mR=_mm_setzero_ps();
+	mR=_mm_addsub_ps(_mm_shuffle_ps(mAux5,mAux4,_MM_SHUFFLE(3,2,1,0)),_mm_shuffle_ps(mAux5,mAux4,_MM_SHUFFLE(2,3,0,1)));	
+	mR=_mm_shuffle_ps(mR,mR,_MM_SHUFFLE(2,1,3,0));
 	
-	mR=_mm_add_ps(mC,mC1);
-	mR=_mm_add_ps(mR,mC2);
-	mR=_mm_add_ps(mR,mC3);
 	
 		
 	_mm_store_ps(R->comp,mR);    
