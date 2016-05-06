@@ -90,8 +90,15 @@ void multiplica_quaternion(quaternion A, quaternion B, quaternion *R){
 
 void multiplica_lista_quaternion(quaternion *listaA, quaternion *listaB, quaternion *listaR, int N){
     int i=0;
-    for(i=0; i<N; i++){
+    for(i=0; i<N/8; i++){
         multiplica_quaternion(*(listaA + i), *(listaB + i), (listaR + i));
+        multiplica_quaternion(*(listaA + i+1), *(listaB + i+1), (listaR + i+1));
+     	multiplica_quaternion(*(listaA + i+2), *(listaB + i+2), (listaR + i+2));
+	    multiplica_quaternion(*(listaA + i+3), *(listaB + i+3), (listaR + i+3));
+	    multiplica_quaternion(*(listaA + i+4), *(listaB + i+4), (listaR + i+4));
+        multiplica_quaternion(*(listaA + i+5), *(listaB + i+5), (listaR + i+5));
+        multiplica_quaternion(*(listaA + i+6), *(listaB + i+6), (listaR + i+6));
+        multiplica_quaternion(*(listaA + i+7), *(listaB + i+7), (listaR + i+7));
     }
 }
 
