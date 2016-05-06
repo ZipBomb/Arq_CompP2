@@ -76,7 +76,7 @@ void multiplica_quaternion(quaternion A, quaternion B, quaternion *R){
     R->comp[0] = A.comp[0] * B.comp[0] - A.comp[1] * B.comp[1] - A.comp[2] * B.comp[2] - A.comp[3] * B.comp[3];
     R->comp[1] = A.comp[0] * B.comp[1] + A.comp[1] * B.comp[0] + A.comp[2] * B.comp[3] - A.comp[3] * B.comp[2];
     R->comp[2] = A.comp[0] * B.comp[2] - A.comp[1] * B.comp[3] + A.comp[2] * B.comp[0] + A.comp[3] * B.comp[1];
-    R->comp[3] = A.comp[0]*B.comp[3] + A.comp[1]*B.comp[2] - A.comp[2]*B.comp[1] + A.comp[3]*B.comp[0];  
+    R->comp[3] = A.comp[0] * B.comp[3] + A.comp[1] * B.comp[2] - A.comp[2] * B.comp[1] + A.comp[3] * B.comp[0];  
 }
 
 void multiplica_lista_quaternion(quaternion *listaA, quaternion *listaB, quaternion *listaR, int N){
@@ -86,8 +86,18 @@ void multiplica_lista_quaternion(quaternion *listaA, quaternion *listaB, quatern
     }
 }
 
-void segunda_computacion(quaternion *listaA, quaternion *listaAux, quaternion *listaR, int N){
+
+void suma_acumulada(quaternion *listaC, quaternion *dp, int N){
+	int i=0,j=0;
+    for(i=0; i<N; i++){
+    	for(j=0; j<4; j++){
+    		dp->comp[j] = dp->comp[j] + (listaC+i)->comp[i];
+    	}      
+    }
+}
+
+void segunda_computacion(quaternion *listaA, quaternion *listaAux, quaternion *dp, int N){
     multiplica_lista_quaternion(listaA, listaA, listaAux, N);
-    suma_lista_quaternion(listaAux, listaR, listaR, N);
+    suma_acumulada(listaAux, dp, N);
 }
 	
