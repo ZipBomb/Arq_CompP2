@@ -59,23 +59,55 @@ void libera_lista_quaternion(quaternion *lista) {
 }
 
 
+
+
 void multiplica_quaternion(quaternion A, quaternion B, quaternion *R){
-	__m128 mA,mB,mAux1,mAux2,mAux3,mAux4,mAux5,mR;
+	__m128 mAux1,mAux2,mAux3,mAux4,mAux5,mR;
 	
-	mA=_mm_load_ps(A.comp);
-	mB=_mm_load_ps(B.comp);
+	mAux1=_mm_load_ps(A.comp);
+	mAux1=_mm_shuffle_ps(mAux1,mAux1,_MM_SHUFFLE(0,0,0,0));
 	
-	mAux1=_mm_shuffle_ps(mA,mA,_MM_SHUFFLE(0,1,2,3));
-	mAux2=_mm_shuffle_ps(mB,mB,_MM_SHUFFLE(0,1,0,1));
-	mAux3=_mm_shuffle_ps(mB,mB,_MM_SHUFFLE(2,3,2,3));
+	mAux2=_mm_load_ps(B.comp);
 	
-	mAux4=_mm_hsub_ps(_mm_mul_ps(mA,mAux2),_mm_mul_ps(mAux1,mAux3));
-	mAux5=_mm_hadd_ps(_mm_mul_ps(mA,mAux3),_mm_mul_ps(mAux1,mAux2));
+	mAux1=_mm_mul_ps(mAux1,mAux2);
 	
-	mR=_mm_addsub_ps(_mm_shuffle_ps(mAux5,mAux4,_MM_SHUFFLE(3,2,1,0)),_mm_shuffle_ps(mAux5,mAux4,_MM_SHUFFLE(2,3,0,1)));	
-	mR=_mm_shuffle_ps(mR,mR,_MM_SHUFFLE(2,1,3,0));
-			
-	_mm_store_ps(R->comp,mR);    
+	
+	mAux3=_mm_load_ps(A.comp);
+	mAux3=_mm_shuffle_ps(mAux3,mAux3,_MM_SHUFFLE(2,1,3,1));
+	
+	mAux2=_mm_shuffle_ps(mAux2,mAux2,_MM_SHUFFLE(1,3,2,1));
+	
+	mAux3=_mm_mul_ps(mAux2,mAux3);
+	
+	mAux1=_mm_sub_ps(mAux1,mAux3);
+	
+	
+	mAux4=_mm_load_ps(A.comp);
+	mAux4=_mm_shuffle_ps(mAux4,mAux4,_MM_SHUFFLE(1,2,1,2));
+	
+	mAux2=_mm_load_ps(B.comp);
+	mAux2=_mm_shuffle_ps(mAux2,mAux2,_MM_SHUFFLE(2,0,0,2));
+	
+	mAux4=_mm_mul_ps(mAux4,mAux2);
+	
+	mAux5=_mm_load_ps(A.comp);
+	mAux5=_mm_shuffle_ps(mAux5,mAux5,_MM_SHUFFLE(3,3,2,3));
+	
+	mAux2=_mm_load_ps(B.comp);
+	mAux2=_mm_shuffle_ps(mAux2,mAux2,_MM_SHUFFLE(0,1,3,3));
+	
+	mAux2=_mm_mul_ps(mAux2,mAux5);
+	
+	mAux2=_mm_add_ps(mAux2,mAux4);
+		
+	_mm_store_ps(R->comp,mAux2);    
+	R->comp[0]=R->comp[0]*-1;
+	mAux2=_mm_load_ps(R->comp);
+	
+	mR=_mm_add_ps(mAux2,mAux1);
+	
+	_mm_store_ps(R->comp,mR);  
+	
 }
 
 void multiplica_lista_quaternion(quaternion *listaA, quaternion *listaB, quaternion *listaR, int N){

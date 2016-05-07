@@ -1,7 +1,5 @@
-#include <pmmintrin.h>
-
 typedef struct {
-	__m128 comp;
+	float comp[4];
 } quaternion;
 
 float genera_float();
