@@ -6,7 +6,6 @@
 #include "rutinas_clock.h"
 
 int main(int argc, char *argv[]) {
-
 	int N;
 
 	if(argc != 2 ) {
@@ -24,13 +23,11 @@ int main(int argc, char *argv[]) {
 	float x, y, z, w;
     double ck=0;
 	
-    
 	lista_A = genera_lista_quaternion(N);
 	lista_B = genera_lista_quaternion(N);
 	lista_C = genera_lista_quaternion(N);
 	lista_Aux = genera_lista_quaternion(N);
     
-
 	srand(time(NULL));
 
 	quaternion *aux;
@@ -49,9 +46,8 @@ int main(int argc, char *argv[]) {
 		aux = genera_quaternion(x, y, z, w);	
 		anhade_elemento_lista(lista_C, *aux, i);		
 	}
-	
 	for(i=0; i<N; i++) {
-		x = genera_float(); y = genera_float(); z = genera_float(); w = genera_float();
+		x = 0; y = 0; z = 0; w = 0;
 		aux = genera_quaternion(x, y, z, w);	
 		anhade_elemento_lista(lista_Aux, *aux, i);		
 	}
@@ -59,9 +55,7 @@ int main(int argc, char *argv[]) {
 	quaternion *dp;
     x = 0; y = 0; z = 0; w = 0;
     dp = genera_quaternion(x, y, z, w);
-        
-    
-        
+            
     start_counter();
     for(i=0; i<20; i++){
         multiplica_lista_quaternion(lista_A, lista_B, lista_C, N);        
@@ -70,14 +64,15 @@ int main(int argc, char *argv[]) {
     ck=get_counter();
     ck=ck/(N*20);
 
-    printf("Ciclos de acceso a un quaternion [N = %d]: %f\n", N, ck);
-   
+    printf("\nCiclos de acceso a un quaternion [N = %d]: %f\n", N, ck);
+    printf("Valor de DP: ");
+    imprime_quaternion(*dp);
     
-
 	libera_lista_quaternion(lista_A);
 	libera_lista_quaternion(lista_B);
 	libera_lista_quaternion(lista_C);
 	libera_lista_quaternion(lista_Aux);
+    libera_quaternion(dp);
 
 	return 1;
 }	
