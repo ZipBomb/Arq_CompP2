@@ -35,7 +35,7 @@ void libera_quaternion(quaternion *aux) {
 }
 
 quaternion *genera_lista_quaternion(int N) {
-	quaternion *v = _mm_malloc(N * sizeof(quaternion),512);
+	quaternion *v = _mm_malloc(N * sizeof(quaternion),16);
 
 	return v;
 }
@@ -58,70 +58,31 @@ void libera_lista_quaternion(quaternion *lista) {
     free(lista);
 }
 
-
-
-
 void multiplica_quaternion(quaternion A, quaternion B, quaternion *R){
-	__m128 mAux1,mAux2,mAux3,mAux4,mAux5,mR;
+	__m128 m0,m1,m2,m3,mR;
 	
-	mAux1=_mm_load_ps(A.comp);
-	mAux1=_mm_shuffle_ps(mAux1,mAux1,_MM_SHUFFLE(0,0,0,0));
+	m0=_mm_set_ps(A.comp[0]*B.comp[0],A.comp[1]*-B.comp[1],A.comp[2]*-B.comp[2],A.comp[3]*-B.comp[3]);
+	m1=_mm_set_ps(A.comp[0]*B.comp[1],A.comp[1]*B.comp[0],A.comp[2]*B.comp[3],A.comp[3]*-B.comp[2]);
+	m2=_mm_set_ps(A.comp[0]*B.comp[2],A.comp[1]*-B.comp[3],A.comp[2]*B.comp[0],A.comp[3]*B.comp[1]);
+	m3=_mm_set_ps(A.comp[0]*B.comp[3],A.comp[1]*B.comp[2],A.comp[2]*-B.comp[1],A.comp[3]*B.comp[0]);
 	
-	mAux2=_mm_load_ps(B.comp);
+	mR=_mm_setzero_ps();
+	mR=_mm_add_ps(mR,m0);
+	mR=_mm_add_ps(mR,m1);
+	mR=_mm_add_ps(mR,m2);
+	mR=_mm_add_ps(mR,m3);
 	
-	mAux1=_mm_mul_ps(mAux1,mAux2);
-	
-	
-	mAux3=_mm_load_ps(A.comp);
-	mAux3=_mm_shuffle_ps(mAux3,mAux3,_MM_SHUFFLE(2,1,3,1));
-	
-	mAux2=_mm_shuffle_ps(mAux2,mAux2,_MM_SHUFFLE(1,3,2,1));
-	
-	mAux3=_mm_mul_ps(mAux2,mAux3);
-	
-	mAux1=_mm_sub_ps(mAux1,mAux3);
-	
-	
-	mAux4=_mm_load_ps(A.comp);
-	mAux4=_mm_shuffle_ps(mAux4,mAux4,_MM_SHUFFLE(1,2,1,2));
-	
-	mAux2=_mm_load_ps(B.comp);
-	mAux2=_mm_shuffle_ps(mAux2,mAux2,_MM_SHUFFLE(2,0,0,2));
-	
-	mAux4=_mm_mul_ps(mAux4,mAux2);
-	
-	mAux5=_mm_load_ps(A.comp);
-	mAux5=_mm_shuffle_ps(mAux5,mAux5,_MM_SHUFFLE(3,3,2,3));
-	
-	mAux2=_mm_load_ps(B.comp);
-	mAux2=_mm_shuffle_ps(mAux2,mAux2,_MM_SHUFFLE(0,1,3,3));
-	
-	mAux2=_mm_mul_ps(mAux2,mAux5);
-	
-	mAux2=_mm_add_ps(mAux2,mAux4);
-		
-	_mm_store_ps(R->comp,mAux2);    
-	R->comp[0]=R->comp[0]*-1;
-	mAux2=_mm_load_ps(R->comp);
-	
-	mR=_mm_add_ps(mAux2,mAux1);
-	
-	_mm_store_ps(R->comp,mR);  
-	
+	_mm_store_ps(R->comp,mR);
 }
 
 void multiplica_lista_quaternion(quaternion *listaA, quaternion *listaB, quaternion *listaR, int N){
-    int i=0;
-    for(i=0; i<N/8; i++){
+    int i=0;    
+    for(i=0; i<N; i=i+4){
         multiplica_quaternion(*(listaA + i), *(listaB + i), (listaR + i));
         multiplica_quaternion(*(listaA + i+1), *(listaB + i+1), (listaR + i+1));
-     	multiplica_quaternion(*(listaA + i+2), *(listaB + i+2), (listaR + i+2));
-	    multiplica_quaternion(*(listaA + i+3), *(listaB + i+3), (listaR + i+3));
-	    multiplica_quaternion(*(listaA + i+4), *(listaB + i+4), (listaR + i+4));
-        multiplica_quaternion(*(listaA + i+5), *(listaB + i+5), (listaR + i+5));
-        multiplica_quaternion(*(listaA + i+6), *(listaB + i+6), (listaR + i+6));
-        multiplica_quaternion(*(listaA + i+7), *(listaB + i+7), (listaR + i+7));
-    }
+    	multiplica_quaternion(*(listaA + i+2), *(listaB + i+2), (listaR + i+2));
+        multiplica_quaternion(*(listaA + i+3), *(listaB + i+3), (listaR + i+3));	   
+    }    
 }
 
 void suma_acumulada(quaternion *listaC, quaternion *dp, int N){
