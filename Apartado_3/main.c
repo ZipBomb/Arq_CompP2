@@ -60,9 +60,7 @@ int main(int argc, char *argv[]) {
     quaternion *dp;
     x = 0; y = 0; z = 0; w = 0;
     dp = genera_quaternion(x, y, z, w);
-    
-    
-        
+	
     start_counter();
     for(i=0; i<20; i++){
         multiplica_lista_quaternion(lista_A,lista_B,lista_C, N);    
@@ -70,15 +68,16 @@ int main(int argc, char *argv[]) {
     }
     ck=get_counter();
     ck=ck/(N*20);
-
     
     printf("Ciclos de acceso a un quaternion [N = %d]: %f\n",N, ck);
-    
+    printf("Valores de DP: ");
+    imprime_quaternion(*dp);    
     
     libera_lista_quaternion(lista_A);
     libera_lista_quaternion(lista_B);
     libera_lista_quaternion(lista_C);
     libera_lista_quaternion(lista_Aux);
-
+	libera_quaternion(dp);
+	
 	return 1;
 }	
